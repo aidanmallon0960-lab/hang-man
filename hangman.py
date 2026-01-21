@@ -86,23 +86,18 @@ def game_setup():
     random_letter_combination_that_is_totally_random_and_not_real_words = random.choice(letter_combinations)
     incorrect_guesses = []
     word_thing = ["_ "] * len(random_letter_combination_that_is_totally_random_and_not_real_words)
-    print(len(word_thing))
-    print(word_thing)
     return strikes, random_letter_combination_that_is_totally_random_and_not_real_words, incorrect_guesses, word_thing
     
 def main_game(strikes, word, incorrect_guesses, word_thing):
     """
     this is the main game loop where the gallows get updated and it displays the incorrect guesses and word and lets you guess
     """
-    print(word)
-    print(word[0])
     word_list = []
     guesses = 0
     for letter in word:
-        word_list.append(letter)
+        word_list.append(letter.lower())
     while True:
         yea = False
-        print(word_list)
         print_gallows(strikes)
         print("Incorrect guesses: ", end="")
         for idx, letter in enumerate(incorrect_guesses):
@@ -124,11 +119,21 @@ def main_game(strikes, word, incorrect_guesses, word_thing):
         if strikes == 6:
             print(f"You lost! The word was {word.upper()}.")
             return
-        guess = input("Guess a letter: ")
+        check = 0
         while True:
+            guess = input("Guess a letter: ").lower()
+            for thing in incorrect_guesses:
+                if guess == thing:
+                    check = 1
+                else:
+                    continue
             if len(guess) > 1:
                 print("Please enter a valid input")
-                guess = input("Guess a letter: ")
+            elif guess == "":
+                print("Please enter a valid input")
+            elif check == 1:
+                print("please enter a letter you haven't guessed yet")
+                check = 0
             else:
                 try:
                     int(guess)
@@ -144,7 +149,6 @@ def main_game(strikes, word, incorrect_guesses, word_thing):
             incorrect_guesses.append(guess)
             strikes += 1
             yea = False
-        print(word_list)
 
 def main():
     """
